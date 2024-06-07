@@ -143,80 +143,65 @@ function getBook(id) {
   return data.find((d) => d.id === id);
 }
 
-//Destructuring
-
-const book = getBook(5);
-
-// const title = book.title;
-// const authour = book.author;
-const {
-  title,
-  author,
-  id,
-  genres,
-  pages,
-  moviepublicationDate,
-  publicationDate,
-  hasMovieAdaptation,
-} = book;
-
-// const firstGenre = genres[0];
-// const secondGenre = genres[1];
-const [firstGenre, secondGenre, ...otherGenres] = genres;
-
-const newGenre = ["epic_fantasy", ...genres];
-newGenre;
-
-const updatedBook = {
-  ...book,
-  //adding new property
-  moviepublicationDate: "2021-12-25",
-  //overwriting an existing property
-  pages: 2022,
-};
-updatedBook;
-
-//Arrow Functions
-// function getYear(str) {
-//   return str.split("-")[0];
-// }
-const getYear = (str) => str.split("-")[0];
-getYear;
-
-//Template Literals
-const summary = `${title} is ${pages} pages book. Written by authour ${author} in the year ${getYear(
-  publicationDate
-)}`;
-summary;
-
-//Ternary operator
-const pageRange = pages > 1000 ? "over a thousand" : "less than one thousand";
-pageRange;
-console.log(`Book ranges ${pageRange} of pages`);
-
-//Short-Circuiting And Logical Operators: &&, ||, ??
-console.log(true && "string something");
-console.log(false && "string something");
-console.log(hasMovieAdaptation && "this book is a movie");
-
-//falsy values : 0, null, '' empty string, undefined
-console.log(0 && "nikhil");
-console.log("" || "");
-console.log(book.translations.spanish);
-const spanishTranslations = book.translations.spanish || "Not translated";
-spanishTranslations;
-const wrongCount = book.reviews.librarything.reviewsCount || "No Data";
-wrongCount;
-
-// short circuit falsey values :: nullish coalescing operator ??
-const rightCount = book.reviews.librarything.reviewsCount ?? "No Data";
-rightCount;
-
-//OPTIONAL CHAINING ? + nullish coalescing operator ??
+const books = getBooks();
 function getTotalReviewCount(book) {
   const goodreads = book.reviews.goodreads?.reviewsCount ?? 0;
   const librarything = book.reviews.librarything?.reviewsCount ?? 0;
   return goodreads + librarything;
 }
+const arrayNums = [1, 2, 3, 4, 5].map((el) => el * 5);
+arrayNums;
 
-console.log(getTotalReviewCount(book));
+const title = books.map((book) => book.title);
+title;
+
+const essentialData = books.map((bk) => ({
+  title: bk.title,
+  author: bk.author,
+  reviewsCount: getTotalReviewCount(bk),
+}));
+essentialData;
+
+const longBooks = books.filter((bk) => bk.pages > 500);
+longBooks;
+console.log(longBooks.map((el) => el.title));
+
+const longBooksTitle = books
+  .filter((bk) => bk.pages > 500)
+  .filter((bk) => bk.hasMovieAdaptation)
+  .map((bk) => bk.title);
+longBooksTitle;
+
+const adventureBooks = books
+  .filter((bk) => bk.genres.includes("adventure"))
+  .map((bk) => bk.title);
+adventureBooks;
+
+const allPages = books.reduce((sum, bk) => sum + bk.pages, 0);
+allPages;
+
+const arr = [7, 2, 1, 3, 4, 6];
+const newArr = arr.slice().sort((a, b) => a - b);
+arr;
+newArr;
+
+const sortedByPages = books.slice().sort((a, b) => b.pages - a.pages);
+sortedByPages;
+
+//Add book object to array
+const newBook = {
+  id: 6,
+  title: "Wild Adventure",
+  author: "harry james",
+};
+
+const booksAfterAdd = [...books, newBook];
+booksAfterAdd;
+//delete object from book Array
+const booksAfterDelete = booksAfterAdd.filter((books) => books.id != 1);
+booksAfterDelete;
+//Update book object
+const booksAfterUpdate = booksAfterDelete.map((book) =>
+  book.id === 1 ? { ...book, pages: 1230 } : books
+);
+booksAfterUpdate;
